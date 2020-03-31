@@ -1,0 +1,650 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Github Actions Schema",
+	"type": "object",
+	"required": ["on"],
+	"properties": {
+		"name": {
+			"type": "string",
+			"description": "The name of your workflow. GitHub displays the names of your workflows on your repository's actions page. If you omit name, GitHub sets it to the workflow file path relative to the root of the repository."
+		},
+		"env": {
+			"type": "object",
+			"patternProperties": {
+				"^[A-Za-z0-9\\-_]*$": {
+					"type": ["string", "number", "null"]
+				}
+			}
+		},
+		"on": {
+			"description": "Required The name of the GitHub event that triggers the workflow. You can provide a single event string, array of events, array of event types, or an event configuration map that schedules a workflow or restricts the execution of a workflow to specific files, tags, or branch changes. For a list of available events, see \"Events that trigger workflows.\"",
+			"oneOf": [
+				{
+					"type": "string",
+					"$ref": "#/definitions/On_Events",
+					"default": "push"
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string",
+						"$ref": "#/definitions/On_Events"
+					}
+				},
+				{
+					"type": "object",
+					"properties": {
+						"check_run": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"created",
+											"rerequested",
+											"completed",
+											"requested_action"
+										]
+									}
+								}
+							}
+						},
+						"check_suite": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["completed", "requested", "rerequested"]
+									}
+								}
+							}
+						},
+						"create": {
+							"type": "object",
+							"properties": {}
+						},
+						"delete": {
+							"type": "object",
+							"properties": {}
+						},
+						"deployment": {
+							"type": "object",
+							"properties": {}
+						},
+						"deployment_status": {
+							"type": "object",
+							"properties": {}
+						},
+						"fork": {
+							"type": "object",
+							"properties": {}
+						},
+						"gollum": {
+							"type": "object",
+							"properties": {}
+						},
+						"issue_comment": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["created", "edited", "deleted"]
+									}
+								}
+							}
+						},
+						"issues": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"opened",
+											"edited",
+											"deleted",
+											"transferred",
+											"pinned",
+											"unpinned",
+											"closed",
+											"reopened",
+											"assigned",
+											"unassigned",
+											"labeled",
+											"unlabeled",
+											"locked",
+											"unlocked",
+											"milestoned",
+											"demilestoned"
+										]
+									}
+								}
+							}
+						},
+						"label": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["created", "edited", "deleted"]
+									}
+								}
+							}
+						},
+						"milestone": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["created", "closed", "opened", "edited", "deleted"]
+									}
+								}
+							}
+						},
+						"page_build": {
+							"type": "object",
+							"properties": {}
+						},
+						"project": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"created",
+											"updated",
+											"closed",
+											"reopened",
+											"edited",
+											"deleted"
+										]
+									}
+								}
+							}
+						},
+						"project_card": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"created",
+											"moved",
+											"converted",
+											"edited",
+											"deleted"
+										]
+									}
+								}
+							}
+						},
+						"project_column": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["created", "moved", "updated", "deleted"]
+									}
+								}
+							}
+						},
+						"public": {
+							"type": "object",
+							"properties": {}
+						},
+						"pull_request_review": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["submitted", "edited", "dismissed"]
+									}
+								}
+							}
+						},
+						"pull_request_review_comment": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["created", "edited", "deleted"]
+									}
+								}
+							}
+						},
+						"pull_request": {
+							"type": "object",
+							"allOf": [{ "$ref": "#/definitions/PushPullShared" }],
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"assigned",
+											"unassigned",
+											"labeled",
+											"unlabeled",
+											"opened",
+											"edited",
+											"closed",
+											"reopened",
+											"synchronize",
+											"ready_for_review",
+											"locked",
+											"unlocked",
+											"review_requested",
+											"review_request_removed"
+										]
+									}
+								}
+							}
+						},
+						"push": {
+							"type": "object",
+							"$ref": "#/definitions/PushPullShared"
+						},
+						"registry_package": {
+							"type": "object",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["published", "updated"]
+									}
+								}
+							}
+						},
+						"release": {
+							"type": "object",
+							"description": "Runs your workflow anytime the release event occurs. More than one activity type triggers this event.",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": [
+											"published",
+											"unpublished",
+											"created",
+											"edited",
+											"deleted",
+											"prereleased"
+										]
+									}
+								}
+							}
+						},
+						"status": {
+							"type": "object",
+							"description": "Runs your workflow anytime the status of a Git commit changes, which triggers the status event.",
+							"properties": {}
+						},
+						"watch": {
+							"type": "object",
+							"description": "Runs your workflow anytime the watch event occurs. More than one activity type triggers this event.",
+							"properties": {
+								"types": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["started"]
+									}
+								}
+							}
+						},
+						"schedule": {
+							"type": "array",
+							"description": "You can schedule a workflow to run at specific UTC times using POSIX cron syntax. Scheduled workflows run on the latest commit on the default or base branch. The shortest interval you can run scheduled workflows is once every 5 minutes",
+							"items": {
+								"type": "object",
+								"properties": {
+									"cron": {
+										"description": "* is a special character in YAML so you have to quote this string",
+										"type": "string"
+									}
+								}
+							}
+						},
+						"repository_dispatch": {
+							"type": "object",
+							"description": "You can use the GitHub API to trigger a webhook event called repository_dispatch when you want to trigger a workflow for activity that happens outside of GitHub",
+							"properties": {}
+						}
+					}
+				}
+			]
+		},
+		"jobs": {
+			"type": "object",
+			"description": "A workflow run is made up of one or more jobs. Jobs run in parallel by default.",
+			"patternProperties": {
+				"^([_A-Z-a-z])[A-Za-z0-9-_]+$": {
+					"required": ["runs-on"],
+					"type": "object",
+					"description": "Each job must have an id to associate with the job.",
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "The name of the job displayed on GitHub."
+						},
+						"needs": {
+							"description": "Identifies any jobs that must complete successfully before this job will run. It can be a string or array of strings. If a job fails, all jobs that need it are skipped unless the jobs use a conditional statement that causes the job to continue.",
+							"oneOf": [
+								{ "type": "string" },
+								{ "type": "array", "items": { "type": "string" } }
+							]
+						},
+						"runs-on": {
+							"oneOf": [
+								{ "type": "string", "$ref": "#/definitions/RunsOn" },
+								{
+									"type": "array",
+									"items": {
+										"type": "string",
+										"$ref": "#/definitions/RunsOn"
+									}
+								}
+							]
+						},
+						"env": {
+							"type": "object",
+							"patternProperties": {
+								"^[A-Za-z0-9-_]+$": {}
+							}
+						},
+						"if": { "type": "string" },
+						"steps": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"description": "A name for your step to display on GitHub."
+									},
+									"uses": {
+										"type": "string",
+										"description": "Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image."
+									},
+									"id": {
+										"type": "string",
+										"description": "A unique identifier for the step. You can use the id to reference the step in contexts."
+									},
+									"if": {
+										"type": "string",
+										"description": "You can use the if conditional to prevent a step from running unless a condition is met. You can use any supported context and expression to create a conditional."
+									},
+									"run": {
+										"type": "string",
+										"description": "Runs command-line programs using the operating system's shell. If you do not provide a name, the step name will default to the text specified in the run command."
+									},
+									"with": {
+										"type": "object",
+										"description": "A map of the input parameters defined by the action. Each input parameter is a key/value pair. Input parameters are set as environment variables. The variable is prefixed with INPUT_ and converted to upper case.",
+										"anyOf": [
+											{
+												"type": "object",
+												"patternProperties": {
+													"^[a-zA-Z0-9-_]+$": { "type": "string" }
+												}
+											},
+											{
+												"type": "object",
+												"properties": {
+													"args": {
+														"type": "string",
+														"description": "A string that defines the inputs for a Docker container. GitHub passes the args to the container's ENTRYPOINT when the container starts up. An array of strings is not supported by this parameter."
+													},
+													"entrypoint": {
+														"type": "string",
+														"description": "Overrides the Docker ENTRYPOINT in the Dockerfile, or sets it if one wasn't already specified. Unlike the Docker ENTRYPOINT instruction which has a shell and exec form, entrypoint keyword accepts only a single string defining the executable to be run."
+													}
+												}
+											}
+										]
+									},
+									"env": {
+										"type": "object",
+										"description": "Sets environment variables for steps to use in the runner environment. You can also set environment variables for the entire workflow or a job. For more information, see env and jobs.<job_id>.env.",
+										"patternProperties": {
+											"^[A-Za-z0-9-_]": { "type": "string" }
+										}
+									},
+									"continue-on-error": {
+										"type": "boolean",
+										"description": "Prevents a job from failing when a step fails. Set to true to allow a job to pass when this step fails."
+									},
+									"timeout-minutes": {
+										"type": "number",
+										"description": "The maximum number of minutes to run the step before killing the process."
+									}
+								}
+							}
+						},
+						"timeout-minutes": {
+							"type": "number",
+							"description": "The maximum number of minutes to run the step before killing the process."
+						},
+						"strategy": {
+							"type": "object",
+							"properties": {
+								"matrix": {
+									"type": "object",
+									"properties": {
+										"os": {
+											"type": "array",
+											"items": {
+												"type": "string",
+												"$ref": "#/definitions/RunsOn"
+											}
+										},
+										"include": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"patternProperties": {
+													"^[a-zA-Z0-9-_]+$": {}
+												}
+											}
+										},
+										"exclude": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"patternProperties": {
+													"^[a-zA-Z0-9-_]+$": {}
+												}
+											}
+										}
+									},
+									"patternProperties": {
+										"^[a-zA-Z0-9-_]+$": {
+											"anyOf": [
+												{
+													"type": "array",
+													"items": { "type": "string" }
+												},
+												{ "type": "string" }
+											]
+										}
+									}
+								},
+								"fail-fast": {
+									"type": "boolean",
+									"description": "When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true",
+									"default": true
+								},
+								"max-parallel": {
+									"type": "number",
+									"description": "The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines."
+								}
+							}
+						},
+						"container": {
+							"description": "A container to run any steps in a job that don't already specify a container.",
+							"oneOf": [
+								{ "type": "string" },
+								{
+									"type": "object",
+									"required": ["image"],
+									"$ref": "#/definitions/ContainerServices"
+								}
+							]
+						},
+						"services": {
+							"description": "Used to host service containers for a job in a workflow. Service containers are useful for creating databases or cache services like Redis. The runner automatically creates a Docker network and manages the life cycle of the service containers.",
+							"type": "object",
+							"patternProperties": {
+								"^[a-zA-Z0-9-_]+$": {
+									"type": "object",
+									"$ref": "#/definitions/ContainerServices"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"ContainerServices": {
+			"properties": {
+				"image": {
+					"type": "string",
+					"description": "The Docker image to use as the container to run the action. The value can be the Docker Hub image name or a public docker registry name."
+				},
+				"env": {
+					"type": "object",
+					"properties": {},
+					"description": "Sets a map of environment variables in the container."
+				},
+				"ports": {
+					"type": "array",
+					"items": { "type": "number" },
+					"description": "Sets an array of ports to expose on the container."
+				},
+				"volumes": {
+					"type": "array",
+					"items": { "type": "string" },
+					"description": "Sets an array of volumes for the container to use."
+				},
+				"options": {
+					"type": "string",
+					"description": "Additional Docker container resource options. For a list of options, see \"docker create options.\""
+				}
+			}
+		},
+		"RunsOn": {
+			"anyOf": [
+				{ "type": "string" },
+				{
+					"enum": [
+						"windows-latest",
+						"windows-2019",
+						"ubuntu-latest",
+						"ubuntu-18.04",
+						"ubuntu-16.04",
+						"macos-latest",
+						"macos-10.15"
+					]
+				}
+			]
+		},
+		"On_Events": {
+			"enum": [
+				"check_run",
+				"check_suite",
+				"create",
+				"delete",
+				"deployment",
+				"deployment_status",
+				"fork",
+				"gollum",
+				"issue_comment",
+				"issues",
+				"label",
+				"milestone",
+				"page_build",
+				"project",
+				"project_card",
+				"project_column",
+				"public",
+				"pull_request",
+				"pull_request_review",
+				"pull_request_review_comment",
+				"push",
+				"registry_package",
+				"release",
+				"status",
+				"watch",
+				"schedule",
+				"repository_dispatch"
+			]
+		},
+		"PushPullShared": {
+			"type": "object",
+			"properties": {
+				"branches": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"default": "master"
+					}
+				},
+				"tags": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"branches-ignore": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"tags-ignore": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"paths": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"paths-ignore": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
