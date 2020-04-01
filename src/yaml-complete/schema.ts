@@ -23,7 +23,7 @@ export const getYamlApi = async () => {
 };
 
 export function onRequestSchemaURI(resource: string): string | undefined {
-	if (new RegExp(/\.github\/workflows\/*\.ya?ml/).test(resource)) {
+	if (new RegExp(/\.github\/workflows\/.*\.ya?ml/).test(resource)) {
 		return `${G_ACTIONS_YAML_SCHEMA}://schema/githubactions`;
 	}
 	return undefined;
@@ -31,10 +31,10 @@ export function onRequestSchemaURI(resource: string): string | undefined {
 
 let responseCache = '';
 export async function getSchemaContent() {
-	if (responseCache !== '') {
-		return responseCache;
-	}
-	const response = JSON.stringify(require('../../schemas/github-actions.json'));
-	responseCache = response;
-	return responseCache;
+	// if (responseCache !== '') {
+	// 	return responseCache;
+	// }
+	const response = JSON.stringify(require('../../schemas/actions.json'));
+	return response;
+	// return responseCache;
 }

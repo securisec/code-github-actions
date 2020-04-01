@@ -2,7 +2,6 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Github Actions Schema",
 	"type": "object",
-	"required": ["on"],
 	"properties": {
 		"name": {
 			"type": "string",
@@ -358,7 +357,8 @@
 							]
 						},
 						"runs-on": {
-							"oneOf": [
+							"anyOf": [
+								{ "type": "string" },
 								{ "type": "string", "$ref": "#/definitions/RunsOn" },
 								{
 									"type": "array",
@@ -380,14 +380,11 @@
 							"type": "array",
 							"items": {
 								"type": "object",
+								"allOf": [{ "$ref": "./github-popularactions.json" }],
 								"properties": {
 									"name": {
 										"type": "string",
 										"description": "A name for your step to display on GitHub."
-									},
-									"uses": {
-										"type": "string",
-										"description": "Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image."
 									},
 									"id": {
 										"type": "string",
@@ -400,31 +397,6 @@
 									"run": {
 										"type": "string",
 										"description": "Runs command-line programs using the operating system's shell. If you do not provide a name, the step name will default to the text specified in the run command."
-									},
-									"with": {
-										"type": "object",
-										"description": "A map of the input parameters defined by the action. Each input parameter is a key/value pair. Input parameters are set as environment variables. The variable is prefixed with INPUT_ and converted to upper case.",
-										"anyOf": [
-											{
-												"type": "object",
-												"patternProperties": {
-													"^[a-zA-Z0-9-_]+$": { "type": "string" }
-												}
-											},
-											{
-												"type": "object",
-												"properties": {
-													"args": {
-														"type": "string",
-														"description": "A string that defines the inputs for a Docker container. GitHub passes the args to the container's ENTRYPOINT when the container starts up. An array of strings is not supported by this parameter."
-													},
-													"entrypoint": {
-														"type": "string",
-														"description": "Overrides the Docker ENTRYPOINT in the Dockerfile, or sets it if one wasn't already specified. Unlike the Docker ENTRYPOINT instruction which has a shell and exec form, entrypoint keyword accepts only a single string defining the executable to be run."
-													}
-												}
-											}
-										]
 									},
 									"env": {
 										"type": "object",
@@ -440,8 +412,323 @@
 									"timeout-minutes": {
 										"type": "number",
 										"description": "The maximum number of minutes to run the step before killing the process."
+									},
+									"with": {
+										"type": "object",
+										"patternProperties": {
+											"^[a-zA-Z0-9-_].+$": {}
+										}
+									},
+									"uses": {
+										"anyOf": [
+											{
+												"type": "string",
+												"description": "Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image."
+											},
+											{
+												"type": "string",
+												"$ref": "#/definitions/PopularActions"
+											}
+										]
 									}
-								}
+								},
+								"anyOf": [
+									{
+										"if": { "properties": { "uses": { "const": "actions/checkout@v2" } } },
+										"then": {
+											"type": "object",
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"repository": { "type": "string" },
+														"ref": { "type": "string" },
+														"token": { "type": "string" },
+														"ssh-key": { "type": "string" },
+														"ssh-known-hosts": { "type": "string" },
+														"ssh-strict": { "type": "string" },
+														"persist-credentials": { "type": "boolean" },
+														"path": { "type": "string" },
+														"clean": { "type": "boolean" },
+														"fetch-depth": { "type": "number" },
+														"lfs": { "type": "boolean" },
+														"submodules": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": { "properties": { "uses": { "const": "actions/cache@v1.1.2" } } },
+										"type": "object",
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"path": { "type": "string" },
+														"key": { "type": "string" },
+														"restore-keys": { "type": "array" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": { "const": "actions/upload-release-asset@v1.0.2" }
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"upload_url": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "actions/create-release@v1" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"tag_name": { "type": "string" },
+														"release_name": { "type": "string" },
+														"body": { "type": "string" },
+														"draft": { "type": "boolean" },
+														"prerelease": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "actions/setup-python@v1.2.0" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"python-version": { "type": "string" },
+														"architecture": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "actions/setup-node@v1.1.0" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"node-version": { "type": "string" },
+														"registry-url": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": { "const": "sonarsource/sonarcloud-github-action@master" }
+											}
+										},
+										"then": {
+											"description": "[Docs](https://github.com/marketplace/actions/sonarcloud-scan)",
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"projectBaseDir": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "actions/setup-go@v1.0.0" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"go-version": { "type": "string" },
+														"stable": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "codecov/codecov-action@v1.0.6" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"token": { "type": "string" },
+														"file": { "type": "string" },
+														"flags": { "type": "string" },
+														"name": { "type": "string" },
+														"fail_ci_if_error": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "docker/build-push-action@v1.0.1" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"required": ["repository"],
+													"properties": {
+														"repository": { "type": "string" },
+														"username": { "type": "string" },
+														"password": { "type": "string" },
+														"registry": { "type": "string" },
+														"tags": { "type": "string" },
+														"tag_with_ref": { "type": "boolean" },
+														"tag_with_sha": { "type": "boolean" },
+														"path": { "type": "string" },
+														"always_pull": { "type": "boolean" },
+														"build_args": { "type": "string" },
+														"push": { "type": "boolean" },
+														"add_git_labels": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": { "const": "rtCamp/action-slack-notify@v2.0.1" }
+											}
+										},
+										"then": {
+											"properties": {
+												"env": {
+													"type": "object",
+													"required": ["SLACK_CHANNEL", "SLACK_TITLE", "SLACK_WEBHOOK"],
+													"properties": {
+														"SLACK_WEBHOOK": { "type": "string" },
+														"SLACK_CHANNEL": { "type": "string" },
+														"SLACK_TITLE": { "type": "string" },
+														"SLACK_USERNAME": { "type": "string", "default": "rtBot" },
+														"SLACK_ICON": {
+															"type": "string",
+															"default": "https://github.com/rtCamp.png?size=48"
+														},
+														"SLACK_ICON_EMOJI": { "type": "string", "default": "\":bell:\"" },
+														"SLACK_COLOR": { "type": "string", "default": "\"#efefef\"" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": {
+													"const": "GoogleCloudPlatform/github-actions/setup-gcloud@master"
+												}
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"version": { "type": "string", "default": "latest" },
+														"service_account_email": { "type": "string" },
+														"service_account_key": { "type": "string" },
+														"export_default_credentials": {
+															"type": "boolean",
+															"default": true
+														},
+														"project_id": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": { "uses": { "const": "w9jds/firebase-action@v1.3.0" } }
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"required": ["args"],
+													"properties": {
+														"args": { "type": "string", "default": "latest" }
+													}
+												},
+												"env": {
+													"type": "object",
+													"required": ["FIREBASE_TOKEN"],
+													"properties": {
+														"FIREBASE_TOKEN": { "type": "string" },
+														"PROJECT_ID": { "type": "string" },
+														"PROJECT_PATH": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": {
+													"oneOf": [
+														{ "const": "actions/upload-artifact@v1" },
+														{ "const": "actions/download-artifact@v1" }
+													]
+												}
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"name": { "type": "string" },
+														"path": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"else": {
+											"properties": { "with": { "type": "object", "properties": {} } }
+										}
+									}
+								]
 							}
 						},
 						"timeout-minutes": {
@@ -645,6 +932,25 @@
 					}
 				}
 			}
+		},
+		"PopularActions": {
+			"enum": [
+				"actions/checkout@v2",
+				"actions/upload-artifact@v1",
+				"actions/download-artifact@v1",
+				"actions/cache@v1.1.2",
+				"actions/create-release@v1",
+				"actions/upload-release-asset@v1.0.2",
+				"actions/setup-python@v1.2.0",
+				"actions/setup-node@v1.1.0",
+				"actions/setup-go@v1.0.0",
+				"sonarsource/sonarcloud-github-action@master",
+				"codecov/codecov-action@v1.0.6",
+				"docker/build-push-action@v1.0.1",
+				"rtCamp/action-slack-notify@v2.0.1",
+				"GoogleCloudPlatform/github-actions/setup-gcloud@master",
+				"w9jds/firebase-action@v1.3.0"
+			]
 		}
 	}
 }
