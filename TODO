@@ -3,3 +3,7 @@ Github Actions:
   ☐ https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions
   ☐ uses anyOf enums
   ☐ populate fields like uses from github marketplace
+
+Uses:
+Archive:
+  ✔ add java (https://github.com/actions/setup-java) @project(Uses)

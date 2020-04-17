@@ -434,7 +434,11 @@
 								},
 								"anyOf": [
 									{
-										"if": { "properties": { "uses": { "const": "actions/checkout@v2" } } },
+										"if": {
+											"properties": {
+												"uses": { "const": "actions/checkout@v2" }
+											}
+										},
 										"then": {
 											"type": "object",
 											"properties": {
@@ -459,7 +463,11 @@
 										}
 									},
 									{
-										"if": { "properties": { "uses": { "const": "actions/cache@v1.1.2" } } },
+										"if": {
+											"properties": {
+												"uses": { "const": "actions/cache@v1.1.2" }
+											}
+										},
 										"type": "object",
 										"then": {
 											"properties": {
@@ -477,7 +485,9 @@
 									{
 										"if": {
 											"properties": {
-												"uses": { "const": "actions/upload-release-asset@v1.0.2" }
+												"uses": {
+													"const": "actions/upload-release-asset@v1.0.2"
+												}
 											}
 										},
 										"then": {
@@ -493,7 +503,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "actions/create-release@v1" } }
+											"properties": {
+												"uses": { "const": "actions/create-release@v1" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -512,7 +524,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "actions/setup-python@v1.2.0" } }
+											"properties": {
+												"uses": { "const": "actions/setup-python@v1.2.0" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -528,7 +542,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "actions/setup-node@v1.1.0" } }
+											"properties": {
+												"uses": { "const": "actions/setup-node@v1.1.0" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -545,7 +561,9 @@
 									{
 										"if": {
 											"properties": {
-												"uses": { "const": "sonarsource/sonarcloud-github-action@master" }
+												"uses": {
+													"const": "sonarsource/sonarcloud-github-action@master"
+												}
 											}
 										},
 										"then": {
@@ -562,7 +580,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "actions/setup-go@v1.0.0" } }
+											"properties": {
+												"uses": { "const": "actions/setup-go@v1.0.0" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -578,7 +598,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "codecov/codecov-action@v1.0.6" } }
+											"properties": {
+												"uses": { "const": "codecov/codecov-action@v1.0.6" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -597,7 +619,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "docker/build-push-action@v1.0.1" } }
+											"properties": {
+												"uses": { "const": "docker/build-push-action@v1.0.1" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -632,18 +656,31 @@
 											"properties": {
 												"env": {
 													"type": "object",
-													"required": ["SLACK_CHANNEL", "SLACK_TITLE", "SLACK_WEBHOOK"],
+													"required": [
+														"SLACK_CHANNEL",
+														"SLACK_TITLE",
+														"SLACK_WEBHOOK"
+													],
 													"properties": {
 														"SLACK_WEBHOOK": { "type": "string" },
 														"SLACK_CHANNEL": { "type": "string" },
 														"SLACK_TITLE": { "type": "string" },
-														"SLACK_USERNAME": { "type": "string", "default": "rtBot" },
+														"SLACK_USERNAME": {
+															"type": "string",
+															"default": "rtBot"
+														},
 														"SLACK_ICON": {
 															"type": "string",
 															"default": "https://github.com/rtCamp.png?size=48"
 														},
-														"SLACK_ICON_EMOJI": { "type": "string", "default": "\":bell:\"" },
-														"SLACK_COLOR": { "type": "string", "default": "\"#efefef\"" }
+														"SLACK_ICON_EMOJI": {
+															"type": "string",
+															"default": "\":bell:\""
+														},
+														"SLACK_COLOR": {
+															"type": "string",
+															"default": "\"#efefef\""
+														}
 													}
 												}
 											}
@@ -662,7 +699,10 @@
 												"with": {
 													"type": "object",
 													"properties": {
-														"version": { "type": "string", "default": "latest" },
+														"version": {
+															"type": "string",
+															"default": "latest"
+														},
 														"service_account_email": { "type": "string" },
 														"service_account_key": { "type": "string" },
 														"export_default_credentials": {
@@ -677,7 +717,9 @@
 									},
 									{
 										"if": {
-											"properties": { "uses": { "const": "w9jds/firebase-action@v1.3.0" } }
+											"properties": {
+												"uses": { "const": "w9jds/firebase-action@v1.3.0" }
+											}
 										},
 										"then": {
 											"properties": {
@@ -695,6 +737,46 @@
 														"FIREBASE_TOKEN": { "type": "string" },
 														"PROJECT_ID": { "type": "string" },
 														"PROJECT_PATH": { "type": "string" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": { "const": "actions/setup-java@v1" }
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"java-version": {
+															"type": "string",
+															"default": "8",
+															"enum": [
+																"6",
+																"7",
+																"8",
+																"9",
+																"10",
+																"11",
+																"12",
+																"13"
+															]
+														},
+														"java-package": {
+															"type": "string",
+															"default": "jdk",
+															"enum": ["jdk", "jre", "jdk+fx"]
+														},
+														"architecture": {
+															"type": "string",
+															"default": "x64",
+															"enum": ["x64", "x86"]
+														}
 													}
 												}
 											}
@@ -725,7 +807,9 @@
 									},
 									{
 										"else": {
-											"properties": { "with": { "type": "object", "properties": {} } }
+											"properties": {
+												"with": { "type": "object", "properties": {} }
+											}
 										}
 									}
 								]
@@ -949,7 +1033,8 @@
 				"docker/build-push-action@v1.0.1",
 				"rtCamp/action-slack-notify@v2.0.1",
 				"GoogleCloudPlatform/github-actions/setup-gcloud@master",
-				"w9jds/firebase-action@v1.3.0"
+				"w9jds/firebase-action@v1.3.0",
+				"actions/setup-java@v1"
 			]
 		}
 	}
