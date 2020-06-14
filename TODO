@@ -1,9 +1,12 @@
 
 Github Actions:
-  ☐ https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions
   ☐ uses anyOf enums
   ☐ populate fields like uses from github marketplace
 
 Uses:
 Archive:
+  ✔ pypa/gh-action-pypi-publish@v1.1.0 @project(Github Actions)
+  ✔ npm equivalent ^^ @project(Github Actions)
+  ✔ update actions/download-artifact@v1 to v2 @project(Github Actions)
+  ✔ add some enums for if statement https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions @project(Github Actions)
   ✔ add java (https://github.com/actions/setup-java) @project(Uses)

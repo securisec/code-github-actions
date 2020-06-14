@@ -2,7 +2,7 @@
 	"name": "github-actions",
 	"displayName": "github-actions",
 	"description": "Github Actions VSCode",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": {
 		"name": "Hapsida @securisec"
 	},
@@ -41,7 +41,7 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^7.0.1",
-		"@types/node": "^12.11.7",
+		"@types/node": "^12.12.37",
 		"@types/vscode": "^1.42.0",
 		"@typescript-eslint/eslint-plugin": "^2.18.0",
 		"@typescript-eslint/parser": "^2.18.0",

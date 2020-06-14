@@ -392,7 +392,39 @@
 									},
 									"if": {
 										"type": "string",
-										"description": "You can use the if conditional to prevent a step from running unless a condition is met. You can use any supported context and expression to create a conditional."
+										"description": "You can use the if conditional to prevent a step from running unless a condition is met. You can use any supported context and expression to create a conditional.",
+										"anyOf": [
+											{ "type": "string" },
+											{
+												"type": "string",
+												"enum": [
+													"always($1)",
+													"cancelled()",
+													"failure()",
+													"github.event_path",
+													"github.workflow",
+													"github.job",
+													"github.run_id",
+													"github.run_number",
+													"github.actor",
+													"github.repository",
+													"github.repository_owner",
+													"github.event_name",
+													"github.sha",
+													"github.ref",
+													"github.head_ref",
+													"github.base_ref",
+													"github.token",
+													"github.workspace",
+													"github.action",
+													"env.<env_name>",
+													"job.status",
+													"job.container.network",
+													"job.container.id",
+													"os"
+												]
+											}
+										]
 									},
 									"run": {
 										"type": "string",
@@ -745,6 +777,70 @@
 									{
 										"if": {
 											"properties": {
+												"uses": {
+													"const": "pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df"
+												}
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"tag_name": { "type": "string" },
+														"tag_message": { "type": "string" },
+														"commit_pattern": { "type": "string" }
+													}
+												},
+												"env": {
+													"type": "object",
+													"required": ["GITHUB_TOKEN", "NPM_AUTH_TOKEN"],
+													"properties": {
+														"GITHUB_TOKEN": {
+															"type": "string",
+															"default": "${{ secrets.GITHUB_TOKEN }}",
+															"description": "Leave unchanged"
+														},
+														"NPM_AUTH_TOKEN": {
+															"type": "string",
+															"default": "${{ secrets.NPM_AUTH_TOKEN }}"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": {
+													"const": "pypa/gh-action-pypi-publish@v1.1.0"
+												}
+											}
+										},
+										"then": {
+											"properties": {
+												"if": {
+													"type": "string",
+													"default": "github.event_name == 'push' && startsWith(github.ref, 'refs/tags')"
+												},
+												"with": {
+													"type": "object",
+													"required": ["user", "password"],
+													"properties": {
+														"user": { "type": "string" },
+														"password": { "type": "string" },
+														"repository_url": { "type": "string" },
+														"packages_dir": { "type": "string" },
+														"verify_metadata": { "type": "boolean" }
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
 												"uses": { "const": "actions/setup-java@v1" }
 											}
 										},
@@ -754,17 +850,22 @@
 													"type": "object",
 													"properties": {
 														"java-version": {
-															"type": "string",
-															"default": "8",
-															"enum": [
-																"6",
-																"7",
-																"8",
-																"9",
-																"10",
-																"11",
-																"12",
-																"13"
+															"oneOf": [
+																{ "type": "string" },
+																{
+																	"type": "string",
+																	"default": "8",
+																	"enum": [
+																		"6",
+																		"7",
+																		"8",
+																		"9",
+																		"10",
+																		"11",
+																		"12",
+																		"13"
+																	]
+																}
 															]
 														},
 														"java-package": {
@@ -787,8 +888,8 @@
 											"properties": {
 												"uses": {
 													"oneOf": [
-														{ "const": "actions/upload-artifact@v1" },
-														{ "const": "actions/download-artifact@v1" }
+														{ "const": "actions/upload-artifact@v2" },
+														{ "const": "actions/download-artifact@v2" }
 													]
 												}
 											}
@@ -797,6 +898,7 @@
 											"properties": {
 												"with": {
 													"type": "object",
+													"required": ["name"],
 													"properties": {
 														"name": { "type": "string" },
 														"path": { "type": "string" }
@@ -1020,8 +1122,8 @@
 		"PopularActions": {
 			"enum": [
 				"actions/checkout@v2",
-				"actions/upload-artifact@v1",
-				"actions/download-artifact@v1",
+				"actions/upload-artifact@v2",
+				"actions/download-artifact@v2",
 				"actions/cache@v1.1.2",
 				"actions/create-release@v1",
 				"actions/upload-release-asset@v1.0.2",
@@ -1034,7 +1136,9 @@
 				"rtCamp/action-slack-notify@v2.0.1",
 				"GoogleCloudPlatform/github-actions/setup-gcloud@master",
 				"w9jds/firebase-action@v1.3.0",
-				"actions/setup-java@v1"
+				"actions/setup-java@v1",
+				"pypa/gh-action-pypi-publish@v1.1.0",
+				"pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df"
 			]
 		}
 	}
