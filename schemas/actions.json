@@ -613,7 +613,7 @@
 									{
 										"if": {
 											"properties": {
-												"uses": { "const": "actions/setup-go@v1.0.0" }
+												"uses": { "const": "actions/setup-go@v2" }
 											}
 										},
 										"then": {
@@ -622,7 +622,10 @@
 													"type": "object",
 													"properties": {
 														"go-version": { "type": "string" },
-														"stable": { "type": "boolean" }
+														"stable": {
+															"type": "string",
+															"enum": ["true", "false"]
+														}
 													}
 												}
 											}
@@ -1129,7 +1132,7 @@
 				"actions/upload-release-asset@v1.0.2",
 				"actions/setup-python@v1.2.0",
 				"actions/setup-node@v1.1.0",
-				"actions/setup-go@v1.0.0",
+				"actions/setup-go@v2",
 				"sonarsource/sonarcloud-github-action@master",
 				"codecov/codecov-action@v1.0.6",
 				"docker/build-push-action@v1.0.1",
