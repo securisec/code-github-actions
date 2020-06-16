@@ -557,6 +557,136 @@
 									{
 										"if": {
 											"properties": {
+												"uses": { "const": "elgohr/ecr-login-action@master" }
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"required": [
+														"aws_key",
+														"secret_access_key",
+														"region"
+													],
+													"properties": {
+														"aws_key": {
+															"type": "string",
+															"description": "The AWS key"
+														},
+														"secret_access_key": {
+															"type": "string",
+															"description": "AWS secret access key"
+														},
+														"region": {
+															"type": "string",
+															"description": "the region you would like to login to"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": { "const": "elgohr/gcloud-login-action@master" }
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"required": ["account_key"],
+													"properties": {
+														"account_key": {
+															"type": "string",
+															"description": "Base64 encoded service account key exported as JSON"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"uses": {
+													"const": "elgohr/Publish-Docker-Github-Action@master"
+												}
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"required": ["name", "username", "password"],
+													"properties": {
+														"name": {
+															"type": "string",
+															"description": "the name of the image you would like to push"
+														},
+														"username": {
+															"type": "string",
+															"description": "the login username for the registry. If you're using GitHub Packages, you might also want to use ${{ github.actor }} as the username"
+														},
+														"password": {
+															"type": "string",
+															"description": "the authentication token [preferred] or login password for the registry"
+														},
+														"registry": {
+															"type": "string",
+															"description": "Use registry for pushing to a custom registry."
+														},
+														"snapshot": {
+															"type": "boolean",
+															"description": "Use snapshot to push an additional image, which is tagged with {YEAR}{MONTH}{DAY}{HOUR}{MINUTE}{SECOND}{first 6 digits of the git sha}"
+														},
+														"dockerfile": {
+															"type": "string",
+															"description": "Use dockerfile when you would like to explicitly build a Dockerfile."
+														},
+														"workdir": {
+															"type": "string",
+															"description": "Use workdir when you would like to change the directory for building"
+														},
+														"context": {
+															"type": "string",
+															"description": "Use context when you would like to change the Docker build context."
+														},
+														"buildargs": {
+															"type": "string",
+															"description": "Use buildargs when you want to pass a list of environment variables as build-args"
+														},
+														"buildoptions": {
+															"type": "string",
+															"description": "Use buildoptions when you want to configure options for building."
+														},
+														"cache": {
+															"type": "string",
+															"description": "Use cache when you have big images, that you would only like to build partially (changed layers)"
+														},
+														"tags": {
+															"type": "string",
+															"default": "latest",
+															"description": "This action supports multiple options that tags are handled"
+														},
+														"tag_names": {
+															"type": "boolean",
+															"description": "Use tag_names when you want to push tags/release by their git name (e.g. refs/tags/MY_TAG_NAME)"
+														},
+														"tag_semver": {
+															"type": "boolean",
+															"description": "Use tag_semver when you want to push tags using the semver syntax by their git name (e.g. refs/tags/v1.2.3)"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
 												"uses": { "const": "actions/setup-python@v1.2.0" }
 											}
 										},
@@ -1141,7 +1271,10 @@
 				"w9jds/firebase-action@v1.3.0",
 				"actions/setup-java@v1",
 				"pypa/gh-action-pypi-publish@v1.1.0",
-				"pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df"
+				"pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df",
+				"elgohr/Publish-Docker-Github-Action@master",
+				"elgohr/gcloud-login-action@master",
+				"elgohr/ecr-login-action@master"
 			]
 		}
 	}
