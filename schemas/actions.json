@@ -764,6 +764,88 @@
 									{
 										"if": {
 											"properties": {
+												"uses": { "const": "peaceiris/actions-gh-pages@v3" }
+											}
+										},
+										"then": {
+											"properties": {
+												"with": {
+													"type": "object",
+													"properties": {
+														"github_token": {
+															"type": "string",
+															"enum": ["${{ secrets.GITHUB_TOKEN }}"],
+															"default": "${{ secrets.GITHUB_TOKEN }}",
+															"description": "This option is for GITHUB_TOKEN, not a personal access token."
+														},
+														"deploy_key": {
+															"type": "string",
+															"description": "SSH Deploy key"
+														},
+														"personal_token": {
+															"type": "string",
+															"description": "Generated personal access token with repo permission"
+														},
+														"publish_branch": {
+															"type": "string",
+															"default": "gh-pages",
+															"description": "A target branch to deploy to GitHub Pages. The default is gh-pages"
+														},
+														"publish_dir": {
+															"type": "string",
+															"default": "public"
+														},
+														"cname": {
+															"type": "string",
+															"description": "To add CNAME file, we can set the cname option."
+														},
+														"enable_jekyll": {
+															"type": "boolean",
+															"default": false,
+															"description": "If you want GitHub Pages to process your site with the static site generator Jekyll, set enable_jekyll to true"
+														},
+														"allow_empty_commit": {
+															"type": "boolean",
+															"description": "By default, a commit will not be generated when no file changes. If you want to allow an empty commit, set the optional parameter allow_empty_commit to true"
+														},
+														"keep_files": {
+															"type": "boolean",
+															"description": "By default, existing files in the publish branch are removed before adding the ones from publish dir. If you want the action to add new files but leave existing ones untouched, set the optional parameter keep_files to true"
+														},
+														"external_repository": {
+															"type": "string",
+															"description": "By default, your files are published to the repository which is running this action. If you want to publish to another repository on GitHub, set the environment variable external_repository to <username>/<external-repository>."
+														},
+														"force_orphan": {
+															"type": "boolean",
+															"description": "We can set the force_orphan: true option. This allows you to make your publish branch with only the latest commit"
+														},
+														"user_name": {
+															"type": "string",
+															"description": "Set custom git config user.name and git config user.email. A commit is always created with the same user."
+														},
+														"user_email": {
+															"type": "string",
+															"description": "Set custom git config user.name and git config user.email. A commit is always created with the same user."
+														},
+														"commit_message": {
+															"type": "string",
+															"description": "Set a custom commit message"
+														},
+														"tag_name": {
+															"type": "string"
+														},
+														"tag_message": {
+															"type": "string"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
 												"uses": { "const": "codecov/codecov-action@v1.0.6" }
 											}
 										},
@@ -1274,7 +1356,8 @@
 				"pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df",
 				"elgohr/Publish-Docker-Github-Action@master",
 				"elgohr/gcloud-login-action@master",
-				"elgohr/ecr-login-action@master"
+				"elgohr/ecr-login-action@master",
+				"peaceiris/actions-gh-pages@v3"
 			]
 		}
 	}
