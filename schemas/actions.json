@@ -430,6 +430,18 @@
 										"type": "string",
 										"description": "Runs command-line programs using the operating system's shell. If you do not provide a name, the step name will default to the text specified in the run command."
 									},
+									"uses": {
+										"anyOf": [
+											{
+												"type": "string",
+												"description": "Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image."
+											},
+											{
+												"type": "string",
+												"$ref": "#/definitions/PopularActions"
+											}
+										]
+									},
 									"env": {
 										"type": "object",
 										"description": "Sets environment variables for steps to use in the runner environment. You can also set environment variables for the entire workflow or a job. For more information, see env and jobs.<job_id>.env.",
@@ -450,18 +462,6 @@
 										"patternProperties": {
 											"^[a-zA-Z0-9-_].+$": {}
 										}
-									},
-									"uses": {
-										"anyOf": [
-											{
-												"type": "string",
-												"description": "Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image."
-											},
-											{
-												"type": "string",
-												"$ref": "#/definitions/PopularActions"
-											}
-										]
 									}
 								},
 								"anyOf": [
@@ -497,12 +497,14 @@
 									{
 										"if": {
 											"properties": {
-												"uses": { "const": "actions/cache@v1.1.2" }
+												"uses": { "const": "actions/cache@v2" }
 											}
 										},
 										"type": "object",
+										"required": ["id"],
 										"then": {
 											"properties": {
+												"id": { "type": "string" },
 												"with": {
 													"type": "object",
 													"properties": {
@@ -1339,7 +1341,7 @@
 				"actions/checkout@v2",
 				"actions/upload-artifact@v2",
 				"actions/download-artifact@v2",
-				"actions/cache@v1.1.2",
+				"actions/cache@v2",
 				"actions/create-release@v1",
 				"actions/upload-release-asset@v1.0.2",
 				"actions/setup-python@v1.2.0",
