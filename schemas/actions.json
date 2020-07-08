@@ -331,6 +331,11 @@
 							"type": "object",
 							"description": "You can use the GitHub API to trigger a webhook event called repository_dispatch when you want to trigger a workflow for activity that happens outside of GitHub",
 							"properties": {}
+						},
+						"workflow_dispatch": {
+							"type": "object",
+							"description": "You can manually trigger a workflow from the repository when this event is present",
+							"properties": {}
 						}
 					}
 				}
