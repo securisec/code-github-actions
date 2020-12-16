@@ -17,3 +17,16 @@ Pull requests are welcome!
 <p align="center">
     <img src="https://github.com/securisec/code-github-actions/raw/master/resources/demo.gif" width="65%">
 </p>
+
+## Update Actions
+To update actions automatically, create a new file called `dependabot.yml` in the `.github/workflows` directory with the following contents:
+
+```yaml
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+```
